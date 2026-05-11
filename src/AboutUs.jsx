@@ -64,7 +64,7 @@ const AboutUs = () => {
       {/* Hero Section */}
       <section className="px-6 md:px-10 mb-20">
         <div className="relative h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-2xl">
-          <img src="./Tirta Empul3.jpg" className="w-full h-full object-cover object-bottom" alt="About Hero" />
+          <img src="./Tibumana Waterfall.jpg" className="w-full h-full object-cover object-bottom" alt="About Hero" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8 md:p-16">
             <h1 className="text-4xl md:text-6xl font-extrabold text-white max-w-3xl leading-tight transition-opacity duration-300">
               {t.heroTitle}
