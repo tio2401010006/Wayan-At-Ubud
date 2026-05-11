@@ -7,12 +7,12 @@ import DetailView from "./DetailView";
 import AboutUs from "./AboutUs";
 
 const App = () => {
-   const tourDestinations = [
+  const tourDestinations = [
     {
       id: 101,
       title_en: "FULL DAY TOUR",
       title_id: "TUR SEHARI PENUH",
-      price: "LDR 900.000",
+      price: "IDR 900.000",
       img: "./Tegallalang RIce Terrace.jpg",
       places: [
         { id: "kanto-lampo", name: "Kanto Lampo Waterfall" },
@@ -27,7 +27,7 @@ const App = () => {
       id: 102,
       title_en: "HALF DAY TOUR",
       title_id: "TUR SETENGAH HARI",
-      price: "LDR 600.000",
+      price: "IDR 600.000",
       img: "./Tirta Empul2.jpg",
       places: [
         { id: "tirta-empul", name: "Tampaksiring Holly Water Temple" },
@@ -40,7 +40,7 @@ const App = () => {
       id: 103,
       title_en: "WATERFALL TRIP",
       title_id: "PERJALANAN AIR TERJUN",
-      price: "LDR 550.000",
+      price: "IDR 550.000",
       img: "./Tukad cepung.jpg",
       places: [
         { id: "kanto-lampo", name: "Kanto Lampo Waterfall" },
@@ -52,13 +52,31 @@ const App = () => {
       id: 104,
       title_en: "ADVENTURE",
       title_id: "PETUALANGAN",
-      price: "LDR 4.200.000",
+      price: "Price by Request",
       img: "./Rafting.jpg",
       places: [
         { id: "atv", name: "ATV" },
         { id: "rafting", name: "Rafting" },
         { id: "cycling", name: "Cycling" },
         { id: "jeep-tour", name: "Jeep Tour Batur Sunrise" },
+      ],
+    },
+    {
+      id: 105,
+      title_en: "PICK UP AIRPORT TO UBUD",
+      title_id: "PENJEMPUTAN BANDARA KE UBUD",
+      price: "IDR 500.000",
+      img: "./Pick Up.jpg",
+    },
+    {
+      id: 106,
+      title_en: "EXPRERIENCE",
+      title_id: "PENGALAMAN",
+      price: "IDR 500.000",
+      img: "./Silver Class.jpg",
+      places: [
+        { id: "silverclass", name: "Silver Class" },
+        { id: "cooking", name: "Cooking Class Balinese" },
       ],
     },
   ];
@@ -68,7 +86,7 @@ const App = () => {
       id: 1,
       title_en: "Tampaksiring Holly Water Temple",
       title_id: "Pura Tirta Empul Tampaksiring",
-      price: "LDR 600.000",
+      price: "IDR 600.000",
       img: "./Tirta Empul2.jpg",
       rating: 5,
       reviews: 584,
@@ -77,7 +95,7 @@ const App = () => {
       id: 2,
       title_en: "Tegallalang Rice Terrace",
       title_id: "Tegallalang Rice Terrace",
-      price: "LDR 600.000",
+      price: "IDR HALF DAY 600.000",
       img: "./Tegallalang RIce Terrace.jpg",
       rating: 5,
       reviews: 120,
@@ -86,7 +104,7 @@ const App = () => {
       id: 2,
       title_en: "Coffee Plantation",
       title_id: "Coffee Plantation",
-      price: "LDR 600.000",
+      price: "IDR 600.000",
       img: "./Coffee Plantation.jpg",
       rating: 5,
       reviews: 120,
@@ -95,7 +113,7 @@ const App = () => {
       id: 2,
       title_en: "Tibumana Waterfall",
       title_id: "Tibumana Waterfall",
-      price: "LDR 600.000",
+      price: "FULL DAY IDR 900.000",
       img: "./Tibumana Waterfall.jpg",
       rating: 5,
       reviews: 120,
@@ -104,7 +122,7 @@ const App = () => {
       id: 2,
       title_en: "Tukad Cepung Waterfall",
       title_id: "Tukad Cepung Waterfall",
-      price: "LDR 600.000",
+      price: "FULL DAY IDR 900.000",
       img: "./Tukad cepung.jpg",
       rating: 5,
       reviews: 120,
@@ -113,7 +131,7 @@ const App = () => {
       id: 2,
       title_en: "Penglipuran Village",
       title_id: "Desa Penglipuran",
-      price: "LDR 600.000",
+      price: "IDR 900.000",
       img: "./Penglipuran Village.jpg",
       rating: 5,
       reviews: 120,
@@ -122,7 +140,7 @@ const App = () => {
       id: 2,
       title_en: "Kanto Lampo Waterfall",
       title_id: "Kano Lampo Waterfall",
-      price: "LDR 600.000",
+      price: "FULL DAY IDR 900.000",
       img: "./Kanto Lampo.jpg",
       rating: 5,
       reviews: 120,
@@ -131,17 +149,62 @@ const App = () => {
       id: 2,
       title_en: "Jeep Tour Sunrise",
       title_id: "Jeep Tour Sunrise",
-      price: "LDR 600.000",
+      price: "price by request",
       img: "./jeep tour.jpg",
       rating: 5,
       reviews: 120,
     },
     {
       id: 2,
-      title_en: "Kanto Lampo Waterfall",
-      title_id: "Kano Lampo Waterfall",
-      price: "LDR 600.000",
-      img: "./Kanto Lampo.jpg",
+      title_en: "ATV",
+      title_id: "ATV",
+      price: "price by request",
+      img: "./ATV2.jpg",
+      rating: 5,
+      reviews: 120,
+    },
+    {
+      id: 2,
+      title_en: "Rafting",
+      title_id: "Rafting",
+      price: "price by request",
+      img: "./Rafting.jpg",
+      rating: 5,
+      reviews: 120,
+    },
+    {
+      id: 2,
+      title_en: "Cycling",
+      title_id: "Bersepeda",
+      price: "price by request",
+      img: "./Cycling.jpg",
+      rating: 5,
+      reviews: 120,
+    },
+    {
+      id: 2,
+      title_en: "Monkey Forest Ubud",
+      title_id: "Monkey Forest Ubud",
+      price: "IDR 600.000",
+      img: "./Monkey forest.jpg",
+      rating: 5,
+      reviews: 120,
+    },
+    {
+      id: 2,
+      title_en: "Batur Volcano",
+      title_id: "Batur Volcano",
+      price: "IDR 900.000",
+      img: "./Batur Volacano.jpg",
+      rating: 5,
+      reviews: 120,
+    },
+    {
+      id: 2,
+      title_en: "Tegallalang Rice Terrace",
+      title_id: "Tegallalang Rice Terrace",
+      price: "IDR FULL DAY 900.000",
+      img: "./Tegallalang RIce Terrace.jpg",
       rating: 5,
       reviews: 120,
     },
@@ -149,26 +212,53 @@ const App = () => {
       id: 2,
       title_en: "Kanto Lampo Waterfall",
       title_id: "Kano Lampo Waterfall",
-      price: "LDR 600.000",
+      price: "WATERFALL TRIP IDR 550.000",
       img: "./Kanto Lampo.jpg",
       rating: 5,
       reviews: 120,
     },
     {
       id: 2,
-      title_en: "Kanto Lampo Waterfall",
-      title_id: "Kano Lampo Waterfall",
-      price: "LDR 600.000",
-      img: "./Kanto Lampo.jpg",
+      title_en: "Tibumana Waterfall",
+      title_id: "Tibumana Waterfall",
+      price: "WATERFALL TRIP IDR 550.000",
+      img: "./Tibumana Waterfall.jpg",
       rating: 5,
       reviews: 120,
     },
     {
       id: 2,
-      title_en: "Kanto Lampo Waterfall",
-      title_id: "Kano Lampo Waterfall",
-      price: "LDR 600.000",
-      img: "./Kanto Lampo.jpg",
+      title_en: "Tukad Cepung Waterfall",
+      title_id: "Tukad Cepung Waterfall",
+      price: "WATERFALL TRIP IDR 550.000",
+      img: "./Tukad cepung.jpg",
+      rating: 5,
+      reviews: 120,
+    },
+    {
+      id: 2,
+      title_en: "Pick Up Airport To Ubud",
+      title_id: "Penjemputan Bandara ke Ubud",
+      price: "IDR 550.000",
+      img: "./Pick Up.jpg",
+      rating: 5,
+      reviews: 120,
+    },
+    {
+      id: 2,
+      title_en: "Cooking Class Balinese",
+      title_id: "Kelas Memasak Masakan Bali",
+      price: "IDR 550.000",
+      img: "./Cooking Class.jpg",
+      rating: 5,
+      reviews: 120,
+    },
+    {
+      id: 2,
+      title_en: "Silver Class",
+      title_id: "Kelas Perak",
+      price: "IDR 550.000",
+      img: "./Silver Class.jpg",
       rating: 5,
       reviews: 120,
     },
@@ -198,6 +288,21 @@ const App = () => {
       name: "Tirta Empul Holly Water Temple",
       img: "./Tirta Empul2.jpg",
     },
+    {
+      id: 16,
+      name: "Silver Class",
+      img: "./Silver Class.jpg",
+    },
+    {
+      id: 17,
+      name: "Pick Up Airport To Ubud",
+      img: "./Pick Up.jpg",
+    },
+    {
+      id: 18,
+      name: "Coffee Plantation",
+      img: "./Coffee Plantation.jpg",
+    },
   ];
 
   const location = useLocation();
@@ -208,7 +313,7 @@ const App = () => {
   const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
 
- // Logika filter data
+  // Logika filter data
   const filteredTours = tourDestinations.filter((tour) => {
     const title =
       i18n.language === "id"
@@ -232,9 +337,6 @@ const App = () => {
     }
   };
 
-  
- 
-
   // Fungsi yang dipanggil saat tombol Cari diklik
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -254,7 +356,6 @@ const App = () => {
   }
 
   return (
-    
     <div className="min-h-screen font-sans bg-gray-50 overflow-x-hidden text-left">
       <nav
         className={`flex items-center justify-between px-6 md:px-10 py-5 w-full z-50 transition-all duration-300 ${

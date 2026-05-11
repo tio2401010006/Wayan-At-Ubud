@@ -53,10 +53,10 @@ const DetailView = ({ tour, onBack, language = "id" }) => {
     e.preventDefault();
     // Menggunakan displayTitle agar nama paket di WA sesuai bahasa yang sedang aktif
     const message = `${t.waHeader}\n\n` +
-                    `📍 Paket: ${displayTitle}\n` +
-                    `📅 Tanggal: ${bookingData.date}\n` +
-                    `👥 Peserta: ${bookingData.guests} ${t.waUnit}\n` +
-                    `📝 Catatan: ${bookingData.note || "-"}`;
+                    `📍 Package: ${displayTitle}\n` +
+                    `📅 Date: ${bookingData.date}\n` +
+                    `👥 Guests: ${bookingData.guests} ${t.waUnit}\n` +
+                    `📝 Note: ${bookingData.note || "-"}`;
     
     const whatsappUrl = `https://wa.me/6287762023292?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
