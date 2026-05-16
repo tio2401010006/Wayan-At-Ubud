@@ -175,6 +175,61 @@ const LandingPage = ({
         )}
       </section>
 
+      <section className="mt-32 px-10 max-w-7xl mx-auto text-center" id="packages">
+        <h3 className="text-3xl font-bold mb-2">{t("packages_title")}</h3>
+        <p className="text-gray-500 mb-10">{t("packages_subtitle")}</p>
+
+        {/* Logika Pengecekan Data Paket Anda ... */}
+        {tourDestinations.length === 0 ? (
+          <div className="py-20 text-gray-500 bg-white ...">
+            {/* ... isi pesan kosong ... */}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pb-20">
+            {/* ... peta data tourDestinations ... */}
+          </div>
+        )}
+      </section> {/* <-- Batas Akhir Section Packages */}
+
+
+      {/* ========================================================= */}
+      {/* LIVE PETA & TOMBOL WHATSAPP (Taruh di Sini) */}
+      {/* ========================================================= */}
+      {localLokasi.trim() && (
+        <section className="px-10 max-w-7xl mx-auto mb-20">
+          <div className="flex flex-col md:flex-row gap-6 p-6 bg-white rounded-xl shadow-md border border-gray-100">
+            {/* Tempat Map Muncul di Dalam Web */}
+            <div className="w-full md:w-2/3 h-96 rounded-xl overflow-hidden shadow-inner bg-gray-100">
+              <iframe
+                title="Bali Map"
+                src={`https://www.google.com/maps?q=${encodeURIComponent(localLokasi.trim())}%20Bali&output=embed`}
+                className="w-full h-full border-0"
+                allowFullScreen=""
+                loading="lazy"
+              ></iframe>
+            </div>
+
+            {/* Sisi Kanan: Panel Interaksi / Tanya Admin */}
+            <div className="w-full md:w-1/3 flex flex-col justify-center text-left p-4">
+              <h4 className="font-bold text-2xl text-gray-900 mb-2">
+                Tertarik dengan "{localLokasi}"?
+              </h4>
+              <p className="text-gray-500 mb-6 text-sm leading-relaxed">
+                Peta di samping menunjukkan lokasi asli di Bali. Jika ada pertanyaan mengenai rute, akomodasi, atau paket tour di area ini, silakan hubungi tim kami.
+              </p>
+              <a
+                href={`https://wa.me/6287762023292?text=Halo%20Admin,%20saya%20ingin%20bertanya%20tentang%20destinasi%20${encodeURIComponent(localLokasi)}%20di%20Bali.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white text-center py-3 rounded-full font-bold transition-all shadow-md hover:scale-[1.02]"
+              >
+                Tanya Admin via WhatsApp
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* 3. TRENDING SECTION */}
       <section className="relative w-full min-h-[450px] flex items-center pt-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
