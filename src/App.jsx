@@ -7,7 +7,7 @@ import DetailView from "./DetailView";
 import AboutUs from "./AboutUs";
 
 const App = () => {
-   const tourDestinations = [
+  const tourDestinations = [
     {
       id: 101,
       title_en: "FULL DAY TOUR",
@@ -52,7 +52,7 @@ const App = () => {
       id: 104,
       title_en: "ADVENTURE",
       title_id: "PETUALANGAN",
-      price: "Price by Request",
+      price: "Asking by Request",
       img: "./Rafting.jpg",
       places: [
         { id: "atv", name: "ATV" },
@@ -72,7 +72,7 @@ const App = () => {
       id: 104,
       title_en: "EXPRERIENCE",
       title_id: "PENGALAMAN",
-      price: "Price by Request",
+      price: "Asking by Request",
       img: "./Cooking Class.jpg",
       places: [
         { id: "Cooking Class Balinese", name: "Cooking Class Balinese" },
@@ -185,7 +185,7 @@ const App = () => {
       id: 8,
       title_en: "Jeep Tour Sunrise",
       title_id: "Jeep Tour Sunrise",
-      price: "Price by Request",
+      price: "Asking by Request",
       img: "./jeep tour.jpg",
       rating: 5,
       reviews: 120,
@@ -194,7 +194,7 @@ const App = () => {
       id: 9,
       title_en: "ATV",
       title_id: "ATV",
-      price: "Price by Request",
+      price: "Asking by Request",
       img: "./ATV2.jpg",
       rating: 5,
       reviews: 180,
@@ -203,7 +203,7 @@ const App = () => {
       id: 10,
       title_en: "Rafting",
       title_id: "Rafting",
-      price: "Price by Request",
+      price: "Asking by Request",
       img: "./Rafting.jpg",
       rating: 5,
       reviews: 120,
@@ -212,7 +212,7 @@ const App = () => {
       id: 11,
       title_en: "Cycling",
       title_id: "Cycling",
-      price: "Price by Request",
+      price: "Asking by Request",
       img: "./Cycling.jpg",
       rating: 5,
       reviews: 200,
@@ -248,7 +248,7 @@ const App = () => {
       id: 15,
       title_en: "Cooking Class Balinese",
       title_id: "Kelas Memasak Masakan Bali",
-      price: "Price by Request",
+      price: "Asking by Request",
       img: "./Cooking Class.jpg",
       rating: 5,
       reviews: 300,
@@ -257,7 +257,7 @@ const App = () => {
       id: 16,
       title_en: "Silver Class",
       title_id: "Kelas Perak",
-      price: "Price by Request",
+      price: "Asking by Request",
       img: "./Silver Class.jpg",
       rating: 5,
       reviews: 120,
@@ -303,7 +303,7 @@ const App = () => {
   const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
 
- // Logika filter data
+  // Logika filter data
   const filteredTours = tourDestinations.filter((tour) => {
     const title =
       i18n.language === "id"
@@ -327,9 +327,6 @@ const App = () => {
     }
   };
 
-  
- 
-
   // Fungsi yang dipanggil saat tombol Cari diklik
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -349,7 +346,6 @@ const App = () => {
   }
 
   return (
-    
     <div className="min-h-screen font-sans bg-gray-50 overflow-x-hidden text-left">
       <nav
         className={`flex items-center justify-between px-6 md:px-10 py-5 w-full z-50 transition-all duration-300 ${
