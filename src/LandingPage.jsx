@@ -13,14 +13,51 @@ const LandingPage = ({
 }) => {
   const { t, i18n } = useTranslation();
   // State lokal untuk menampung input user sementara
-  const [localLokasi, setLocalLokasi] = React.useState("");
+  const [localLokasi, setLocalLokasi] = useState(""); // <-- Sudah dirapikan dari React.useState
   const [localGuests, setLocalGuests] = useState("");
 
   const handleSearchSubmit = () => {
+    // 1. Jalankan fungsi filter pencarian internal web Anda
     onSearch(localLokasi);
+    // 2. Logika otomatis membuka Google Maps khusus Bali
+    if (localLokasi.trim()) {
+      const queryUser = localLokasi.trim().toLowerCase();
+      let kueriTambahan = " Bali"; // Default ditambahkan kata Bali
+
+      // Cek apakah input user mengandung kata kunci hotel
+      const kataKunciHotel = [
+        "hotel",
+        "villa",
+        "resort",
+        "homestay",
+        "penginapan",
+        "staycation",
+      ];
+      const apakahMencariHotel = kataKunciHotel.some((kata) =>
+        queryUser.includes(kata),
+      );
+
+      if (apakahMencariHotel) {
+        // Jika mendeteksi kata hotel, kunci pencarian ke hotel di Bali
+        kueriTambahan = " Hotel Bali";
+      } else {
+        // Jika tempat umum, kunci pencarian ke objek wisata di Bali
+        kueriTambahan = " Wisata Bali";
+      }
+
+      // Gabungkan input user dengan kueri pelindung
+      const destinasiLengkap = `${localLokasi.trim()}${kueriTambahan}`;
+      const encodedDestination = encodeURIComponent(destinasiLengkap);
+
+      // Buka Google Maps di tab baru
+      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedDestination}`;
+      window.open(googleMapsUrl, "_blank");
+    }
+
     // Otomatis scroll ke bagian paket setelah cari
     document.getElementById("packages")?.scrollIntoView({ behavior: "smooth" });
   };
+  // =========================================================
 
   // Helper untuk mengambil judul sesuai bahasa yang aktif
   const getTitle = (item) => {
@@ -62,22 +99,6 @@ const LandingPage = ({
             </div>
           </div>
 
-          {/* Input Tamu (Opsional: jika ingin difungsikan juga) */}
-          <div className="flex items-center gap-3 border-r pr-6">
-            <Users className="text-teal-600" size={24} />
-            <div className="flex flex-col text-left">
-              <p className="text-sm text-teal-600 font-bold">{t("guests")}</p>
-              <input
-                type="text"
-                placeholder={t("How Many Guest?")}
-                className="text-sm outline-none border-none focus:ring-0 w-40"
-                value={localGuests}
-                onChange={(e) => setLocalGuests(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
-              />
-            </div>
-          </div>
-
           <button
             onClick={handleSearchSubmit}
             className="bg-amber-300 hover:bg-teal-600 hover:text-white px-10 py-3 rounded-full font-bold transition-all"
@@ -87,7 +108,10 @@ const LandingPage = ({
         </div>
       </header>
       {/* 2. PACKAGES SECTION */}
-      <section className="mt-32 px-10 max-w-7xl mx-auto text-center" id="packages">
+      <section
+        className="mt-32 px-10 max-w-7xl mx-auto text-center"
+        id="packages"
+      >
         <h3 className="text-3xl font-bold mb-2">{t("packages_title")}</h3>
         <p className="text-gray-500 mb-10">{t("packages_subtitle")}</p>
 
@@ -96,7 +120,9 @@ const LandingPage = ({
           /* JIKA KOSONG */
           <div className="py-20 text-gray-500 bg-white rounded-2xl shadow-sm border border-dashed border-gray-300">
             <p className="text-xl">
-              Ups! Destinasi <span className="font-bold text-teal-600">"{localLokasi}"</span> tidak ditemukan.
+              Ups! Destinasi{" "}
+              <span className="font-bold text-teal-600">"{localLokasi}"</span>{" "}
+              tidak ditemukan.
             </p>
             <button
               onClick={() => {
@@ -148,7 +174,6 @@ const LandingPage = ({
           </div>
         )}
       </section>
-      
 
       {/* 3. TRENDING SECTION */}
       <section className="relative w-full min-h-[450px] flex items-center pt-20 overflow-hidden">
