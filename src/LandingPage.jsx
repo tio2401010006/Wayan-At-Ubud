@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { MapPin, Users, Calendar, ArrowLeft, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+// 1. Tetap mengimport komponen ulasan eksternal yang sudah dibuat terpisah
+import CommentSection from "./CommentSection";
+
 const LandingPage = ({
   tourDestinations,
   featuredDestinations,
@@ -12,19 +15,15 @@ const LandingPage = ({
   onSearch,
 }) => {
   const { t, i18n } = useTranslation();
-  // State lokal untuk menampung input user sementara
-  const [localLokasi, setLocalLokasi] = useState(""); // <-- Sudah dirapikan dari React.useState
+  const [localLokasi, setLocalLokasi] = useState(""); 
   const [localGuests, setLocalGuests] = useState("");
 
   const handleSearchSubmit = () => {
-    // 1. Jalankan fungsi filter pencarian internal web Anda
     onSearch(localLokasi);
-    // 2. Logika otomatis membuka Google Maps khusus Bali
     if (localLokasi.trim()) {
       const queryUser = localLokasi.trim().toLowerCase();
-      let kueriTambahan = " Bali"; // Default ditambahkan kata Bali
+      let kueriTambahan = " Bali"; 
 
-      // Cek apakah input user mengandung kata kunci hotel
       const kataKunciHotel = [
         "hotel",
         "villa",
@@ -38,28 +37,21 @@ const LandingPage = ({
       );
 
       if (apakahMencariHotel) {
-        // Jika mendeteksi kata hotel, kunci pencarian ke hotel di Bali
         kueriTambahan = " Hotel Bali";
       } else {
-        // Jika tempat umum, kunci pencarian ke objek wisata di Bali
         kueriTambahan = " Wisata Bali";
       }
 
-      // Gabungkan input user dengan kueri pelindung
       const destinasiLengkap = `${localLokasi.trim()}${kueriTambahan}`;
       const encodedDestination = encodeURIComponent(destinasiLengkap);
 
-      // Buka Google Maps di tab baru
       const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedDestination}`;
       window.open(googleMapsUrl, "_blank");
     }
 
-    // Otomatis scroll ke bagian paket setelah cari
     document.getElementById("packages")?.scrollIntoView({ behavior: "smooth" });
   };
-  // =========================================================
 
-  // Helper untuk mengambil judul sesuai bahasa yang aktif
   const getTitle = (item) => {
     return i18n.language === "id"
       ? item.title_id || item.title_en
@@ -84,7 +76,7 @@ const LandingPage = ({
 
         {/* SEARCH BAR */}
         <div className="absolute -bottom-10 z-20 bg-white p-6 rounded-xl shadow-2xl flex flex-wrap gap-6 items-center text-black">
-          <div className="flex items-center gap-3 border-r pr-6">
+          <div className="flex items-center gap-3">
             <MapPin className="text-teal-600" size={24} />
             <div className="flex flex-col text-left">
               <p className="text-sm text-teal-600 font-bold">{t("location")}</p>
@@ -107,6 +99,7 @@ const LandingPage = ({
           </button>
         </div>
       </header>
+
       {/* 2. PACKAGES SECTION */}
       <section
         className="mt-32 px-10 max-w-7xl mx-auto text-center"
@@ -115,9 +108,7 @@ const LandingPage = ({
         <h3 className="text-3xl font-bold mb-2">{t("packages_title")}</h3>
         <p className="text-gray-500 mb-10">{t("packages_subtitle")}</p>
 
-        {/* LOGIKA PENGECEKAN DATA */}
         {tourDestinations.length === 0 ? (
-          /* JIKA KOSONG */
           <div className="py-20 text-gray-500 bg-white rounded-2xl shadow-sm border border-dashed border-gray-300">
             <p className="text-xl">
               Ups! Destinasi{" "}
@@ -135,7 +126,6 @@ const LandingPage = ({
             </button>
           </div>
         ) : (
-          /* JIKA ADA DATA */
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pb-20">
             {tourDestinations.map((tour) => (
               <div
@@ -163,8 +153,10 @@ const LandingPage = ({
                     ))}
                   </div>
                   <div className="mt-auto flex items-center justify-between">
-                    <p className="font-bold text-gray-900">{tour.price}</p>
-                    <span className="text-[10px] text-gray-500 font-medium">
+                    <p className="font-bold text-gray-900 hover:text-amber-400">
+                      {tour.price}
+                    </p>
+                    <span className="text-[10px] text-gray-500 hover:text-black font-medium">
                       {t("see_detail")}
                     </span>
                   </div>
@@ -175,30 +167,10 @@ const LandingPage = ({
         )}
       </section>
 
-      <section className="mt-32 px-10 max-w-7xl mx-auto text-center" id="packages">
-        <h3 className="text-3xl font-bold mb-2">{t("packages_title")}</h3>
-        <p className="text-gray-500 mb-10">{t("packages_subtitle")}</p>
-
-        {/* Logika Pengecekan Data Paket Anda ... */}
-        {tourDestinations.length === 0 ? (
-          <div className="py-20 text-gray-500 bg-white ...">
-            {/* ... isi pesan kosong ... */}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pb-20">
-            {/* ... peta data tourDestinations ... */}
-          </div>
-        )}
-      </section> {/* <-- Batas Akhir Section Packages */}
-
-
-      {/* ========================================================= */}
-      {/* LIVE PETA & TOMBOL WHATSAPP (Taruh di Sini) */}
-      {/* ========================================================= */}
+      {/* LIVE PETA & TOMBOL WHATSAPP */}
       {localLokasi.trim() && (
         <section className="px-10 max-w-7xl mx-auto mb-20">
           <div className="flex flex-col md:flex-row gap-6 p-6 bg-white rounded-xl shadow-md border border-gray-100">
-            {/* Tempat Map Muncul di Dalam Web */}
             <div className="w-full md:w-2/3 h-96 rounded-xl overflow-hidden shadow-inner bg-gray-100">
               <iframe
                 title="Bali Map"
@@ -209,21 +181,22 @@ const LandingPage = ({
               ></iframe>
             </div>
 
-            {/* Sisi Kanan: Panel Interaksi / Tanya Admin */}
             <div className="w-full md:w-1/3 flex flex-col justify-center text-left p-4">
               <h4 className="font-bold text-2xl text-gray-900 mb-2">
                 Tertarik dengan "{localLokasi}"?
               </h4>
               <p className="text-gray-500 mb-6 text-sm leading-relaxed">
-                Peta di samping menunjukkan lokasi asli di Bali. Jika ada pertanyaan mengenai rute, akomodasi, atau paket tour di area ini, silakan hubungi tim kami.
+                Peta di samping menunjukkan lokasi asli di Bali. Jika ada
+                pertanyaan mengenai rute, akomodasi, atau paket tour di area
+                ini, silakan hubungi tim kami.
               </p>
               <a
                 href={`https://wa.me/6287762023292?text=Halo%20Admin,%20saya%20ingin%20bertanya%20tentang%20destinasi%20${encodeURIComponent(localLokasi)}%20di%20Bali.`}
                 target="_blank"
-                rel="noopener noreferrer"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white text-center py-3 rounded-full font-bold transition-all shadow-md hover:scale-[1.02]"
-              >
-                Tanya Admin via WhatsApp
+                rel="noopener noreferrer">
+                  <span className="bg-emerald-500 hover:bg-emerald-600 text-white text-center py-3 rounded-full font-bold transition-all    shadow-md   hover:scale-[1.02] block cursor-pointer">
+                  Tanya Admin via WhatsApp
+                  </span>
               </a>
             </div>
           </div>
@@ -301,7 +274,7 @@ const LandingPage = ({
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   alt={getTitle(item)}
                 />
-                <div className="absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-md font-bold text-sm shadow-sm border border-emerald-100">
+                <div className="absolute top-4 right-4 bg-emerald-50 text-teal-900 px-3 py-1 rounded-md font-bold text-sm shadow-sm border border-emerald-100">
                   {item.price}
                 </div>
               </div>
@@ -375,6 +348,10 @@ const LandingPage = ({
           ))}
         </div>
       </section>
+
+      {/* 2. CUKUP PANGGIL TAG KOMPONEN INI DI SINI */}
+      {/* Seluruh state dan handle form aman berada di dalam file terpisah (CommentSection.jsx) */}
+      <CommentSection />
     </>
   );
 };

@@ -5,6 +5,7 @@ import { Menu, X, MapPin, Users, Search } from "lucide-react";
 import LandingPage from "./LandingPage";
 import DetailView from "./DetailView";
 import AboutUs from "./AboutUs";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 
 const App = () => {
   const tourDestinations = [
@@ -336,211 +337,263 @@ const App = () => {
   };
 
   if (selectedTour) {
+    const tourTitle = i18n.language === "id" ? selectedTour.title_id : selectedTour.title_en;
     return (
-      <DetailView
-        tour={selectedTour}
-        onBack={() => setSelectedTour(null)}
-        language={i18n.language}
-      />
+      <HelmetProvider>
+        <Helmet>
+          <title>{`${tourTitle} Best Price - Wayan at Ubud Bali Tour`}</title>
+          <meta 
+            name="description" 
+            content={i18n.language === "id" 
+              ? `Pesan paket ${tourTitle} terbaik di Ubud, Bali. Harga terjangkau ${selectedTour.price}, sopir berpengalaman, dan pelayanan ramah.`
+              : `Book the best ${tourTitle} in Ubud, Bali. Affordable price at ${selectedTour.price}, experienced driver, and friendly service.`
+            } 
+          />
+          <meta name="keywords" content={`ubud tour, bali driver, ${tourTitle ? tourTitle.toLowerCase() : ""}, bali waterfall trip`} />
+          <meta property="og:title" content={`${tourTitle} - Wayan at Ubud`} />
+          <meta property="og:description" content={`Best tour package in Bali: ${tourTitle}. Price: ${selectedTour.price}`} />
+          <meta property="og:image" content={`${window.location.origin}/${selectedTour.img}`} />
+        </Helmet>
+        <DetailView
+          tour={selectedTour}
+          onBack={() => setSelectedTour(null)}
+          language={i18n.language}
+        />
+      </HelmetProvider>
     );
   }
 
   return (
-    <div className="min-h-screen font-sans bg-gray-50 overflow-x-hidden text-left">
-      <nav
-        className={`flex items-center justify-between px-6 md:px-10 py-5 w-full z-50 transition-all duration-300 ${
-          isAboutPage
-            ? "bg-[#0b1629] sticky top-0 shadow-lg text-white"
-            : "bg-transparent absolute text-white"
-        }`}
-      >
-        <h1 className="text-xl font-bold italic tracking-tighter">
-          WAYAN at UBUD
-        </h1>
-
-        <div className="hidden md:flex space-x-8 font-medium">
-          {/* NavLink otomatis memberikan class 'active' saat diklik */}
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `transition-colors duration-300 hover:text-amber-300 ${isActive ? "" : ""}`
+    <HelmetProvider>
+      <div className="min-h-screen font-sans bg-gray-50 overflow-x-hidden text-left">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Helmet>
+                  <title>{i18n.language === "id" ? "Wayan at Ubud - Tur & Driver Kustom Terbaik di Bali" : "Wayan at Ubud - Best Custom Tours & Private Driver in Bali"}</title>
+                  <meta 
+                    name="description" 
+                    content={i18n.language === "id"
+                      ? "Nikmati liburan tak terlupakan di Bali bersama Wayan at Ubud. Menyediakan tur sehari penuh, perjalanan air terjun, petualangan ATV/Rafting, dan penjemputan bandara."
+                      : "Enjoy an unforgettable holiday in Bali with Wayan at Ubud. Offering full day tours, waterfall trips, ATV/Rafting adventures, and airport pick-up."
+                    } 
+                  />
+                  <meta name="keywords" content="ubud tour, bali private driver, bali custom tour, ubud waterfall trip, mt batur jeep tour, balinese cooking class, wayan ubud" />
+                  <meta property="og:title" content="Wayan at Ubud - Bali Private Tour" />
+                  <meta property="og:description" content="Explore Ubud and Bali with custom tour packages. Best price guaranteed." />
+                  <meta property="og:image" content={`${window.location.origin}/Tegallalang RIce Terrace.jpg`} />
+                </Helmet>
+                <LandingPage
+                  tourDestinations={filteredTours}
+                  onSearch={(query) => setSearchQuery(query)}
+                  featuredDestinations={featuredDestinations}
+                  galleryImages={galleryImages}
+                  setSelectedTour={setSelectedTour}
+                  scroll={scroll}
+                  scrollRef={scrollRef}
+                />
+              </>
             }
-          >
-            Home
-          </NavLink>
-
-          <NavLink
-            to="/AboutUs"
-            className={({ isActive }) =>
-              `transition-colors duration-300 hover:text-amber-300 ${isActive ? "" : ""}`
+          />
+          <Route
+            path="/AboutUs"
+            element={
+              <>
+                <Helmet>
+                  <title>{i18n.language === "id" ? "Tentang Kami - Wayan at Ubud" : "About Us - Wayan at Ubud"}</title>
+                  <meta 
+                    name="description" 
+                    content={i18n.language === "id"
+                      ? "Ketahui lebih lanjut tentang Wayan at Ubud, penyedia layanan tur lokal terpercaya di Ubud, Bali yang berkomitmen memberikan pengalaman wisata terbaik."
+                      : "Learn more about Wayan at Ubud, a trusted local tour provider in Ubud, Bali committed to delivering the best travel experiences."
+                    } 
+                  />
+                </Helmet>
+                <AboutUs language={i18n.language} />
+              </>
             }
-          >
-            About Us
-          </NavLink>
+          />
+        </Routes>
 
-          <a
-            href="#packages"
-            className="hover:text-amber-300 transition-colors"
-          >
-            Packages
-          </a>
-        </div>
-
-        <button
-          className="md:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        <nav
+          className={`flex items-center justify-between px-6 md:px-10 py-5 w-full z-50 transition-all duration-300 ${
+            isAboutPage
+              ? "bg-[#0b1629] sticky top-0 shadow-lg text-white"
+              : "bg-transparent absolute text-white"
+          }`}
         >
-          {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </nav>
-      {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 bg-[#0f1d33] z-[60] flex flex-col items-center justify-center text-white space-y-8 text-2xl transition-all duration-300">
-          {/* Tombol Close (Opsional jika ingin tombol terpisah, tapi icon X sudah ada di navbar) */}
-          <Link to="/" onClick={() => setIsMenuOpen(false)}>
-            {t("nav_home")}
-          </Link>
-          <Link to="/AboutUs" onClick={() => setIsMenuOpen(false)}>
-            {t("nav_about")}
-          </Link>
-          <Link to="/ContactUs" onClick={() => setIsMenuOpen(false)}>
-            {t("nav_contact")}
-          </Link>
-          <a href="#packages" onClick={() => setIsMenuOpen(false)}>
-            {t("nav_packages")}
-          </a>
+          <h1 className="text-xl font-bold italic tracking-tighter">
+            WAYAN at UBUD
+          </h1>
 
-          {/* Tambahkan pilihan bahasa juga di menu mobile agar user mudah akses */}
-          <div className="pt-10">
-            <select
-              onChange={(e) => {
-                changeLanguage(e);
-                setIsMenuOpen(false);
-              }}
-              value={i18n.language}
-              className="bg-gray-800 text-base text-white p-2 rounded border border-gray-700"
+          <div className="hidden md:flex space-x-8 font-medium">
+            {/* NavLink otomatis memberikan class 'active' saat diklik */}
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `transition-colors duration-300 hover:text-amber-300 ${isActive ? "" : ""}`
+              }
             >
-              <option value="en">English</option>
-              <option value="id">Indonesia</option>
-            </select>
-          </div>
-        </div>
-      )}
+              Home
+            </NavLink>
 
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <LandingPage
-              tourDestinations={filteredTours}
-              onSearch={(query) => setSearchQuery(query)}
-              featuredDestinations={featuredDestinations}
-              galleryImages={galleryImages}
-              setSelectedTour={setSelectedTour}
-              scroll={scroll}
-              scrollRef={scrollRef}
-            />
-          }
-        />
-        <Route
-          path="/AboutUs"
-          element={<AboutUs language={i18n.language} />} // Tambahkan prop ini
-        />
-      </Routes>
-      {/* FOOTER BARU (SESUAI DESAIN GAMBAR) */}
-      <footer className="bg-[#0b1629] text-gray-400 py-16 px-6 md:px-16 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            {/* Kolom 1: Language */}
-            <div className="space-y-4">
-              <h4 className="text-white font-bold text-lg">Language</h4>
-              <div className="relative">
-                <select
-                  onChange={changeLanguage}
-                  value={i18n.language}
-                  className="w-full bg-[#162235] text-white p-3 rounded-md border border-gray-700 appearance-none focus:outline-none focus:ring-1 focus:ring-teal-500 cursor-pointer"
-                >
-                  <option value="en">🇬🇧 English (UK)</option>
-                  <option value="id">🇮🇩 Indonesia</option>
-                </select>
-                <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+            <NavLink
+              to="/AboutUs"
+              className={({ isActive }) =>
+                `transition-colors duration-300 hover:text-amber-300 ${isActive ? "" : ""}`
+              }
+            >
+              About Us
+            </NavLink>
+
+            <a
+              href="#packages"
+              className="hover:text-amber-300 transition-colors"
+            >
+              Packages
+            </a>
+          </div>
+
+          <button
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </nav>
+        {isMenuOpen && (
+          <div className="md:hidden fixed inset-0 bg-[#0f1d33] z-[60] flex flex-col items-center justify-center text-white space-y-8 text-2xl transition-all duration-300">
+            {/* Tombol Close (Opsional jika ingin tombol terpisah, tapi icon X sudah ada di navbar) */}
+            <Link to="/" onClick={() => setIsMenuOpen(false)}>
+              {t("nav_home")}
+            </Link>
+            <Link to="/AboutUs" onClick={() => setIsMenuOpen(false)}>
+              {t("nav_about")}
+            </Link>
+            <Link to="/ContactUs" onClick={() => setIsMenuOpen(false)}>
+              {t("nav_contact")}
+            </Link>
+            <a href="#packages" onClick={() => setIsMenuOpen(false)}>
+              {t("nav_packages")}
+            </a>
+
+            {/* Tambahkan pilihan bahasa juga di menu mobile agar user mudah akses */}
+            <div className="pt-10">
+              <select
+                onChange={(e) => {
+                  changeLanguage(e);
+                  setIsMenuOpen(false);
+                }}
+                value={i18n.language}
+                className="bg-gray-800 text-base text-white p-2 rounded border border-gray-700"
+              >
+                <option value="en">English</option>
+                <option value="id">Indonesia</option>
+              </select>
+            </div>
+          </div>
+        )}
+
+        {/* FOOTER BARU (SESUAI DESAIN GAMBAR) */}
+        <footer className="bg-[#0b1629] text-gray-400 py-16 px-6 md:px-16 border-t border-gray-800">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+              {/* Kolom 1: Language */}
+              <div className="space-y-4">
+                <h4 className="text-white font-bold text-lg">Language</h4>
+                <div className="relative">
+                  <select
+                    onChange={changeLanguage}
+                    value={i18n.language}
+                    className="w-full bg-[#162235] text-white p-3 rounded-md border border-gray-700 appearance-none focus:outline-none focus:ring-1 focus:ring-teal-500 cursor-pointer"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
+                    <option value="en">🇬🇧 English (UK)</option>
+                    <option value="id">🇮🇩 Indonesia</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Kolom 2: Company */}
+              <div className="space-y-4">
+                <h4 className="text-white font-bold text-lg">Company</h4>
+                <ul className="space-y-2">
+                  <li>
+                    <Link
+                      to="/AboutUs"
+                      className="hover:text-white transition-colors"
+                    >
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" className="hover:text-white transition-colors">
+                      Blog
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Kolom 3: Help */}
+              <div className="space-y-4">
+                <h4 className="text-white font-bold text-lg">Help</h4>
+                <ul className="space-y-2">
+                  <li>
+                    <a href="#" className="hover:text-white transition-colors">
+                      Contact us
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-white transition-colors">
+                      FAQs
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Kolom 4: Payment Methods */}
+              <div className="space-y-4">
+                <h4 className="text-white font-bold text-lg">
+                  Payment Methods
+                </h4>
+                <div className="flex gap-2">
+                  <div className="bg-white px-3 py-1 rounded text-[#0b1629] font-black text-[10px] shadow-sm">
+                    VISA
+                  </div>
+                  <div className="bg-white px-3 py-1 rounded text-[#0b1629] font-black text-[10px] shadow-sm">
+                    MC
+                  </div>
+                  <div className="bg-white px-3 py-1 rounded text-[#0b1629] font-black text-[10px] shadow-sm">
+                    PAYPAL
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Kolom 2: Company */}
-            <div className="space-y-4">
-              <h4 className="text-white font-bold text-lg">Company</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    to="/AboutUs"
-                    className="hover:text-white transition-colors"
-                  >
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="hover:text-white transition-colors">
-                    Blog
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Kolom 3: Help */}
-            <div className="space-y-4">
-              <h4 className="text-white font-bold text-lg">Help</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Contact us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    FAQs
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Kolom 4: Payment Methods */}
-            <div className="space-y-4">
-              <h4 className="text-white font-bold text-lg">Payment Methods</h4>
-              <div className="flex gap-2">
-                <div className="bg-white px-3 py-1 rounded text-[#0b1629] font-black text-[10px] shadow-sm">
-                  VISA
-                </div>
-                <div className="bg-white px-3 py-1 rounded text-[#0b1629] font-black text-[10px] shadow-sm">
-                  MC
-                </div>
-                <div className="bg-white px-3 py-1 rounded text-[#0b1629] font-black text-[10px] shadow-sm">
-                  PAYPAL
-                </div>
-              </div>
+            {/* Garis Pembatas & Copyright */}
+            <div className="pt-8 border-t border-gray-800 text-center text-sm">
+              <p>Copyright 2026 ByO.Digital. All Rights Reserved</p>
             </div>
           </div>
-
-          {/* Garis Pembatas & Copyright */}
-          <div className="pt-8 border-t border-gray-800 text-center text-sm">
-            <p>Copyright 2026 ByO.Digital. All Rights Reserved</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </HelmetProvider>
   );
 };
 
