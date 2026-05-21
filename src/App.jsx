@@ -337,22 +337,33 @@ const App = () => {
   };
 
   if (selectedTour) {
-    const tourTitle = i18n.language === "id" ? selectedTour.title_id : selectedTour.title_en;
+    const tourTitle =
+      i18n.language === "id" ? selectedTour.title_id : selectedTour.title_en;
     return (
       <HelmetProvider>
         <Helmet>
-          <title>{`${tourTitle} Best Price - Wayan at Ubud Bali Tour`}</title>
-          <meta 
-            name="description" 
-            content={i18n.language === "id" 
-              ? `Pesan paket ${tourTitle} terbaik di Ubud, Bali. Harga terjangkau ${selectedTour.price}, sopir berpengalaman, dan pelayanan ramah.`
-              : `Book the best ${tourTitle} in Ubud, Bali. Affordable price at ${selectedTour.price}, experienced driver, and friendly service.`
-            } 
+          <title>{`${tourTitle}Best Price - Wayan at Ubud Bali Tour`}</title>
+          <meta
+            name="description"
+            content={
+              i18n.language === "id"
+                ? `Pesan paket ${tourTitle} terbaik di Ubud, Bali. Harga terjangkau ${selectedTour.price}, sopir berpengalaman, dan pelayanan ramah.`
+                : `Book the best ${tourTitle} in Ubud, Bali. Affordable price at ${selectedTour.price}, experienced driver, and friendly service.`
+            }
           />
-          <meta name="keywords" content={`ubud tour, bali driver, ${tourTitle ? tourTitle.toLowerCase() : ""}, bali waterfall trip`} />
+          <meta
+            name="keywords"
+            content={`ubud tour, bali driver, ${tourTitle ? tourTitle.toLowerCase() : ""}, bali waterfall trip`}
+          />
           <meta property="og:title" content={`${tourTitle} - Wayan at Ubud`} />
-          <meta property="og:description" content={`Best tour package in Bali: ${tourTitle}. Price: ${selectedTour.price}`} />
-          <meta property="og:image" content={`${window.location.origin}/${selectedTour.img}`} />
+          <meta
+            property="og:description"
+            content={`Best tour package in Bali: ${tourTitle}. Price: ${selectedTour.price}`}
+          />
+          <meta
+            property="og:image"
+            content={`${window.location.origin}/${selectedTour.img}`}
+          />
         </Helmet>
         <DetailView
           tour={selectedTour}
@@ -366,57 +377,6 @@ const App = () => {
   return (
     <HelmetProvider>
       <div className="min-h-screen font-sans bg-gray-50 overflow-x-hidden text-left">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Helmet>
-                  <title>{i18n.language === "id" ? "Wayan at Ubud - Tur & Driver Kustom Terbaik di Bali" : "Wayan at Ubud - Best Custom Tours & Private Driver in Bali"}</title>
-                  <meta 
-                    name="description" 
-                    content={i18n.language === "id"
-                      ? "Nikmati liburan tak terlupakan di Bali bersama Wayan at Ubud. Menyediakan tur sehari penuh, perjalanan air terjun, petualangan ATV/Rafting, dan penjemputan bandara."
-                      : "Enjoy an unforgettable holiday in Bali with Wayan at Ubud. Offering full day tours, waterfall trips, ATV/Rafting adventures, and airport pick-up."
-                    } 
-                  />
-                  <meta name="keywords" content="ubud tour, bali private driver, bali custom tour, ubud waterfall trip, mt batur jeep tour, balinese cooking class, wayan ubud" />
-                  <meta property="og:title" content="Wayan at Ubud - Bali Private Tour" />
-                  <meta property="og:description" content="Explore Ubud and Bali with custom tour packages. Best price guaranteed." />
-                  <meta property="og:image" content={`${window.location.origin}/Tegallalang RIce Terrace.jpg`} />
-                </Helmet>
-                <LandingPage
-                  tourDestinations={filteredTours}
-                  onSearch={(query) => setSearchQuery(query)}
-                  featuredDestinations={featuredDestinations}
-                  galleryImages={galleryImages}
-                  setSelectedTour={setSelectedTour}
-                  scroll={scroll}
-                  scrollRef={scrollRef}
-                />
-              </>
-            }
-          />
-          <Route
-            path="/AboutUs"
-            element={
-              <>
-                <Helmet>
-                  <title>{i18n.language === "id" ? "Tentang Kami - Wayan at Ubud" : "About Us - Wayan at Ubud"}</title>
-                  <meta 
-                    name="description" 
-                    content={i18n.language === "id"
-                      ? "Ketahui lebih lanjut tentang Wayan at Ubud, penyedia layanan tur lokal terpercaya di Ubud, Bali yang berkomitmen memberikan pengalaman wisata terbaik."
-                      : "Learn more about Wayan at Ubud, a trusted local tour provider in Ubud, Bali committed to delivering the best travel experiences."
-                    } 
-                  />
-                </Helmet>
-                <AboutUs language={i18n.language} />
-              </>
-            }
-          />
-        </Routes>
-
         <nav
           className={`flex items-center justify-between px-6 md:px-10 py-5 w-full z-50 transition-all duration-300 ${
             isAboutPage
@@ -463,6 +423,79 @@ const App = () => {
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </nav>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Helmet>
+                  <title>
+                    {i18n.language === "id"
+                      ? "Wayan at Ubud - Tur & Driver Kustom Terbaik di Bali"
+                      : "Wayan at Ubud - Best Custom Tours & Private Driver in Bali"}
+                  </title>
+                  <meta
+                    name="description"
+                    content={
+                      i18n.language === "id"
+                        ? "Nikmati liburan tak terlupakan di Bali bersama Wayan at Ubud. Menyediakan tur sehari penuh, perjalanan air terjun, petualangan ATV/Rafting, dan penjemputan bandara."
+                        : "Enjoy an unforgettable holiday in Bali with Wayan at Ubud. Offering full day tours, waterfall trips, ATV/Rafting adventures, and airport pick-up."
+                    }
+                  />
+                  <meta
+                    name="keywords"
+                    content="ubud tour, bali private driver, bali custom tour, ubud waterfall trip, mt batur jeep tour, balinese cooking class, wayan ubud"
+                  />
+                  <meta
+                    property="og:title"
+                    content="Wayan at Ubud - Bali Private Tour"
+                  />
+                  <meta
+                    property="og:description"
+                    content="Explore Ubud and Bali with custom tour packages. Best price guaranteed."
+                  />
+                  <meta
+                    property="og:image"
+                    content={`${window.location.origin}/Tegallalang RIce Terrace.jpg`}
+                  />
+                </Helmet>
+                <LandingPage
+                  tourDestinations={filteredTours}
+                  onSearch={(query) => setSearchQuery(query)}
+                  featuredDestinations={featuredDestinations}
+                  galleryImages={galleryImages}
+                  setSelectedTour={setSelectedTour}
+                  scroll={scroll}
+                  scrollRef={scrollRef}
+                />
+              </>
+            }
+          />
+          <Route
+            path="/AboutUs"
+            element={
+              <>
+                <Helmet>
+                  <title>
+                    {i18n.language === "id"
+                      ? "Tentang Kami - Wayan at Ubud"
+                      : "About Us - Wayan at Ubud"}
+                  </title>
+                  <meta
+                    name="description"
+                    content={
+                      i18n.language === "id"
+                        ? "Ketahui lebih lanjut tentang Wayan at Ubud, penyedia layanan tur lokal terpercaya di Ubud, Bali yang berkomitmen memberikan pengalaman wisata terbaik."
+                        : "Learn more about Wayan at Ubud, a trusted local tour provider in Ubud, Bali committed to delivering the best travel experiences."
+                    }
+                  />
+                </Helmet>
+                <AboutUs language={i18n.language} />
+              </>
+            }
+          />
+        </Routes>
+
         {isMenuOpen && (
           <div className="md:hidden fixed inset-0 bg-[#0f1d33] z-[60] flex flex-col items-center justify-center text-white space-y-8 text-2xl transition-all duration-300">
             {/* Tombol Close (Opsional jika ingin tombol terpisah, tapi icon X sudah ada di navbar) */}

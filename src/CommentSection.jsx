@@ -1,44 +1,44 @@
 import React, { useState, useEffect } from "react";
 // Import Trash2 untuk ikon hapus yang modern
 import { Trash2 } from "lucide-react";
+// Import client supabase
+import { supabase } from "./supabaseClient";
 
 export default function CommentSection() {
-  const defaultComments = [
-    {
-      id: 1,
-      name: "Sarah Jenkins",
-      rating: 5,
-      comment:
-        "Pelayanan sangat memuaskan! Supirnya ramah dan tahu jalan tikus jadi bebas macet ke Ubud. Sangat direkomendasikan!",
-      date: "12 Mei 2026",
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      rating: 4,
-      comment:
-        "Tour ke Tukad Cepung sangat indah. Penataan jadwalnya pas, hanya saja waktu makan siang agak sedikit terburu-buru. Overall bagus!",
-      date: "15 Mei 2026",
-    },
-  ];
-
-  const [comments, setComments] = useState(() => {
-    const savedComments = localStorage.getItem("wayan_tour_comments");
-    return savedComments ? JSON.parse(savedComments) : defaultComments;
-  });
-
+  // Menggunakan array kosong di awal agar tidak memicu error layar putih saat fetch data
+  const [comments, setComments] = useState([]);
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
   const [commentText, setCommentText] = useState("");
 
+  // 1. FUNGSI AMBIL DATA DARI SUPABASE CLOUD
+  const fetchComments = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("*")
+        .order("id", { ascending: false }); // Ulasan terbaru berada di atas
+
+      if (error) {
+        console.error("Gagal mengambil data dari Supabase:", error);
+        setComments(defaultComments);
+      } else {
+        // Jika database kosong, pakai ulasan default bawaan agar web tidak sepi
+        setComments(data && data.length > 0 ? data : defaultComments);
+      }
+    } catch (err) {
+      console.error("Error tidak terduga:", err);
+      setComments(defaultComments);
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem("wayan_tour_comments", JSON.stringify(comments));
-  }, [comments]);
+    fetchComments();
+  }, []);
 
- const handleDelete = (id) => {
-    // Masukkan password rahasia yang Anda inginkan di sini
+  // 2. FUNGSI HAPUS ULASAN DI DATABASE CLOUD
+  const handleDelete = async (id) => {
     const PASSWORD_ADMIN = "wayan123";
-
     const inputPassword = prompt(
       "Masukkan Password Admin untuk menghapus ulasan:",
     );
@@ -46,39 +46,69 @@ export default function CommentSection() {
     if (inputPassword === null) return; // Jika admin menekan tombol 'Cancel'
 
     if (inputPassword === PASSWORD_ADMIN) {
-      const updatedComments = comments.filter((comment) => comment.id !== id);
-      setComments(updatedComments);
-      alert("Ulasan berhasil dihapus!");
+      try {
+        const { error } = await supabase.from("reviews").delete().eq("id", id);
+
+        if (error) {
+          alert("Gagal menghapus ulasan dari server database.");
+          console.error(error);
+        } else {
+          fetchComments(); // Ambil ulang data terupdate dari cloud
+          alert("Ulasan berhasil dihapus!");
+        }
+      } catch (err) {
+        console.error(err);
+      }
     } else {
       alert(
         "Password salah! Anda tidak memiliki akses untuk menghapus ulasan ini.",
       );
     }
   };
-
-  const handleSubmit = (e) => {
+  // 3. FUNGSI KIRIM ULASAN KE DATABASE CLOUD
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !commentText)
       return alert("Mohon isi nama dan komentar Anda!");
 
+    const formattedDate = new Date().toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
     const newComment = {
-      id: Date.now(), // ID unik menggunakan timestamp
       name: name,
       rating: rating,
       comment: commentText,
-      date: new Date().toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }),
+      date: formattedDate,
     };
 
-    setComments([newComment, ...comments]);
-    setName("");
-    setCommentText("");
-    setRating(5);
-  };
+    try {
+      const { error } = await supabase.from("reviews").insert([newComment]);
 
+      if (error) {
+        // MENAMPILKAN PESAN ERROR ASLI DARI SUPABASE
+        alert(
+          "Gagal dari Supabase: " +
+            error.message +
+            " (Kode: " +
+            error.code +
+            ")",
+        );
+        console.error(error);
+      } else {
+        fetchComments(); // Ambil data ulasan terbaru agar langsung muncul di layar
+        setName("");
+        setCommentText("");
+        setRating(5);
+        alert("Ulasan berhasil terkirim!");
+      }
+    } catch (err) {
+      alert("Error Sistem: " + err.message);
+      console.error(err);
+    }
+  };
 
   return (
     <section id="reviews" className="py-16 bg-white text-left">
@@ -165,12 +195,14 @@ export default function CommentSection() {
                     <span className="text-xs text-gray-400">{item.date}</span>
                   </div>
                   <div className="flex items-center gap-3">
+                    {/* Proteksi rating dengan Number() agar tidak memicu screen blank/putih */}
                     <div className="text-amber-400">
-                      {"★".repeat(item.rating)}
-                      {"☆".repeat(5 - item.rating)}
+                      {"★".repeat(Number(item.rating) || 5)}
+                      {"☆".repeat(5 - (Number(item.rating) || 5))}
                     </div>
 
-                    {/* TOMBOL HAPUS (Hanya muncul/lebih jelas saat kartu di-hover) */}
+                    {/* TOMBOL HAPUS */}
+                    {/* TOMBOL HAPUS */}
                     <button
                       onClick={() => handleDelete(item.id)}
                       className="text-gray-400 hover:text-red-500 transition-colors p-1 rounded-lg hover:bg-red-50"
