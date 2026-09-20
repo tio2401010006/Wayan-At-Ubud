@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { MapPin, Users, Calendar, ArrowLeft, Star } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { MapPin, Users, Calendar } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-// 1. Tetap mengimport komponen ulasan eksternal yang sudah dibuat terpisah
+// Menyisipkan Supabase Client secara aman tanpa mengganggu import lain
+import { supabase } from "./supabaseClient";
+
+// Import komponen eksternal bawaan asli
 import CommentSection from "./CommentSection";
+import FeaturedDestinations from "./FeaturedDestinations";
 
 const LandingPage = ({
   tourDestinations,
@@ -15,14 +19,55 @@ const LandingPage = ({
   onSearch,
 }) => {
   const { t, i18n } = useTranslation();
-  const [localLokasi, setLocalLokasi] = useState(""); 
+
+  const [localLokasi, setLocalLokasi] = useState("");
   const [localGuests, setLocalGuests] = useState("");
+
+  const [supabaseSlideshow, setSupabaseSlideshow] = useState([]);
+
+  useEffect(() => {
+    const fetchSlideshowData = async () => {
+      try {
+        const { data, error } = await supabase.from("slideshow").select("*");
+
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          const formattedData = data.map((item) => ({
+            ...item,
+            title:
+              i18n.language === "id"
+                ? item.title_id || item.title_en
+                : item.title_en || item.title_id,
+
+            // KODE PERBAIKAN: Mengambil data durasi dari Supabase (Jika kosong, default ke Full Day Tour)
+            duration: item.duration || "Full Day Tour",
+
+            category: item.duration || "TUR SEHARI PENUH",
+            price: item.price || "IDR 900.000",
+            rating: 5,
+            reviews: 584,
+          }));
+          setSupabaseSlideshow(formattedData);
+        }
+      } catch (error) {
+        console.error(
+          "Gagal memuat data dari Supabase, menggunakan data fallback asli:",
+          error.message,
+        );
+      }
+    };
+
+    fetchSlideshowData();
+  }, [i18n.language]);
 
   const handleSearchSubmit = () => {
     onSearch(localLokasi);
     if (localLokasi.trim()) {
       const queryUser = localLokasi.trim().toLowerCase();
-      let kueriTambahan = " Bali"; 
+      let kueriTambahan = " Bali";
 
       const kataKunciHotel = [
         "hotel",
@@ -37,7 +82,7 @@ const LandingPage = ({
       );
 
       if (apakahMencariHotel) {
-        kueriTambahan = " Hotel Bali";
+        kuriTambahan = " Hotel Bali";
       } else {
         kueriTambahan = " Wisata Bali";
       }
@@ -74,7 +119,6 @@ const LandingPage = ({
           <p className="mb-8 text-gray-200">{t("hero_subtitle")}</p>
         </div>
 
-        {/* SEARCH BAR */}
         <div className="absolute -bottom-10 z-20 bg-white p-6 rounded-xl shadow-2xl flex flex-wrap gap-6 items-center text-black">
           <div className="flex items-center gap-3">
             <MapPin className="text-teal-600" size={24} />
@@ -111,9 +155,9 @@ const LandingPage = ({
         {tourDestinations.length === 0 ? (
           <div className="py-20 text-gray-500 bg-white rounded-2xl shadow-sm border border-dashed border-gray-300">
             <p className="text-xl">
-              Ups! Destinasi{" "}
+              {t("package_not_found_start")}{" "}
               <span className="font-bold text-teal-600">"{localLokasi}"</span>{" "}
-              tidak ditemukan.
+              {t("package_not_found_end")}
             </p>
             <button
               onClick={() => {
@@ -122,7 +166,7 @@ const LandingPage = ({
               }}
               className="mt-4 text-teal-600 font-bold underline hover:text-teal-800"
             >
-              Lihat semua paket
+              {t("see_all_packages")}
             </button>
           </div>
         ) : (
@@ -142,16 +186,18 @@ const LandingPage = ({
                   <h4 className="font-bold text-sm mb-2 text-teal-600 uppercase tracking-wider">
                     {getTitle(tour)}
                   </h4>
+
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {tour.places?.map((place) => (
+                    {tour.places?.map((place, index) => (
                       <span
-                        key={place.id}
+                        key={index}
                         className="text-[11px] bg-gray-100 text-gray-700 px-3 py-1 rounded-full border border-gray-200"
                       >
-                        {place.name}
+                        {place}
                       </span>
                     ))}
                   </div>
+
                   <div className="mt-auto flex items-center justify-between">
                     <p className="font-bold text-gray-900 hover:text-amber-400">
                       {tour.price}
@@ -174,7 +220,9 @@ const LandingPage = ({
             <div className="w-full md:w-2/3 h-96 rounded-xl overflow-hidden shadow-inner bg-gray-100">
               <iframe
                 title="Bali Map"
-                src={`https://www.google.com/maps?q=${encodeURIComponent(localLokasi.trim())}%20Bali&output=embed`}
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                  localLokasi.trim(),
+                )}%20Bali&output=embed`}
                 className="w-full h-full border-0"
                 allowFullScreen=""
                 loading="lazy"
@@ -183,20 +231,21 @@ const LandingPage = ({
 
             <div className="w-full md:w-1/3 flex flex-col justify-center text-left p-4">
               <h4 className="font-bold text-2xl text-gray-900 mb-2">
-                Tertarik dengan "{localLokasi}"?
+                {t("map_interested_title", { location: localLokasi })}
               </h4>
               <p className="text-gray-500 mb-6 text-sm leading-relaxed">
-                Peta di samping menunjukkan lokasi asli di Bali. Jika ada
-                pertanyaan mengenai rute, akomodasi, atau paket tour di area
-                ini, silakan hubungi tim kami.
+                {t("map_description")}
               </p>
               <a
-                href={`https://wa.me/6287762023292?text=Halo%20Admin,%20saya%20ingin%20bertanya%20tentang%20destinasi%20${encodeURIComponent(localLokasi)}%20di%20Bali.`}
+                href={`https://wa.me/6287762023292?text=${encodeURIComponent(
+                  t("whatsapp_message_template", { location: localLokasi }),
+                )}`}
                 target="_blank"
-                rel="noopener noreferrer">
-                  <span className="bg-emerald-500 hover:bg-emerald-600 text-white text-center py-3 rounded-full font-bold transition-all    shadow-md   hover:scale-[1.02] block cursor-pointer">
-                  Tanya Admin via WhatsApp
-                  </span>
+                rel="noopener noreferrer"
+              >
+                <span className="bg-emerald-500 hover:bg-emerald-600 text-white text-center py-3 rounded-full font-bold transition-all shadow-md hover:scale-[1.02] block cursor-pointer">
+                  {t("ask_admin_whatsapp")}
+                </span>
               </a>
             </div>
           </div>
@@ -204,19 +253,18 @@ const LandingPage = ({
       )}
 
       {/* 3. TRENDING SECTION */}
-      <section className="relative w-full min-h-[450px] flex items-center pt-20 overflow-hidden">
+
+      <section className="relative w-full min-h-[600px] md:min-h-[650px] flex items-center pt-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="./bg-hero.jpg"
-            className="w-full h-full object-cover brightness-75"
+            src="./Monkey Forest2.jpg"
+            className="w-full h-full object-cover object-center brightness-75"
             alt="Bali"
           />
         </div>
+
         <div className="container mx-auto px-10 flex flex-col md:flex-row items-center gap-12 z-10 text-white">
           <div className="text-left">
-            <button className="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-5 py-3 rounded-full uppercase tracking-widest">
-              {t("trending_now")}
-            </button>
             <h2 className="text-5xl md:text-7xl font-bold mt-6 mb-4">
               {t("trending_title")}
             </h2>
@@ -234,78 +282,16 @@ const LandingPage = ({
       </section>
 
       {/* 4. FEATURED DESTINATIONS */}
-      <section className="py-16 px-6 md:px-10 max-w-7xl mx-auto" id="featured">
-        <div className="flex flex-col md:flex-row justify-between mb-10 gap-6">
-          <div className="max-w-2xl text-left">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              {t("featured_title")}
-            </h2>
-            <p className="text-gray-500">{t("featured_subtitle")}</p>
-          </div>
-          <div className="flex gap-4">
-            <button
-              onClick={() => scroll("left")}
-              className="p-4 rounded-full border border-gray-200 hover:bg-gray-100 shadow-sm"
-            >
-              <ArrowLeft size={24} />
-            </button>
-            <button
-              onClick={() => scroll("right")}
-              className="p-4 rounded-full bg-amber-300 hover:bg-amber-400 shadow-md"
-            >
-              <ArrowLeft size={24} className="rotate-180" />
-            </button>
-          </div>
-        </div>
-        <div
-          ref={scrollRef}
-          className="flex gap-6 pb-8 overflow-x-auto snap-x snap-mandatory scrollbar-hide"
-          style={{ scrollBehavior: "smooth" }}
-        >
-          {featuredDestinations.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setSelectedTour(item)}
-              className="min-w-[300px] md:min-w-[320px] bg-white rounded-2xl overflow-hidden shadow-lg snap-start group cursor-pointer text-left flex flex-col"
-            >
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src={item.img}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  alt={getTitle(item)}
-                />
-                <div className="absolute top-4 right-4 bg-emerald-50 text-teal-900 px-3 py-1 rounded-md font-bold text-sm shadow-sm border border-emerald-100">
-                  {item.price}
-                </div>
-              </div>
-              <div className="p-5 flex-grow">
-                <h3 className="font-bold text-gray-900 text-lg mb-4 leading-tight h-12 line-clamp-2">
-                  {getTitle(item)}
-                </h3>
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
-                  <div className="flex items-center gap-1">
-                    <div className="flex text-amber-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={14}
-                          fill={i < item.rating ? "currentColor" : "none"}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-gray-400 text-xs">
-                      ({item.reviews})
-                    </span>
-                  </div>
-                  <span className="text-teal-600 font-bold text-sm">
-                    {t("book_now_caps")}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <FeaturedDestinations
+        featuredDestinations={
+          supabaseSlideshow.length > 0
+            ? supabaseSlideshow
+            : featuredDestinations
+        }
+        setSelectedTour={setSelectedTour}
+        scroll={scroll}
+        scrollRef={scrollRef}
+      />
 
       {/* 5. GALLERY SECTION */}
       <section
@@ -315,16 +301,14 @@ const LandingPage = ({
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
           <div className="max-w-2xl text-left">
             <h2 className="text-5xl font-serif font-bold text-gray-900 mb-4 italic">
-              From The Gallery
+              {t("gallery_title")}
             </h2>
             <p className="text-gray-500 leading-relaxed">
-              Explore the breathtaking beauty of Bali through our curated
-              collection of moments. Each image captures the essence of
-              paradise.
+              {t("gallery_subtitle")}
             </p>
           </div>
           <button className="bg-[#4a5568] hover:bg-gray-800 text-white px-8 py-3 rounded text-sm font-medium transition-all shadow-lg">
-            View All Images
+            {t("gallery_button")}
           </button>
         </div>
 
@@ -349,8 +333,7 @@ const LandingPage = ({
         </div>
       </section>
 
-      {/* 2. CUKUP PANGGIL TAG KOMPONEN INI DI SINI */}
-      {/* Seluruh state dan handle form aman berada di dalam file terpisah (CommentSection.jsx) */}
+      {/* 6. COMMENT SECTION */}
       <CommentSection />
     </>
   );

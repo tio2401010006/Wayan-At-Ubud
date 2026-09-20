@@ -8,7 +8,7 @@ const AboutUs = () => {
     id: {
       heroTitle: "Dedikasi Kami untuk Petualangan Anda",
       storyTitle: "Siapa Kami?",
-      storyDesc: "Wayan at Ubud merupakan sebuah usaha di bidang jasa travel dan tour guide yang telah beroperasi sejak tahun 2010. Berawal dari layanan transportasi wisata, usaha ini terus berkembang dengan mengutamakan kenyamanan, keamanan, dan kepuasan pelanggan selama berada di Bali, khususnya di kawasan Ubud dan sekitarnya.",
+      storyDesc: "Wayan at Ubud merupakan sebuah usaha di bidang jasa travel dan tour guide yang telah beroperasi sejak tahun 2010. Berawal dari layanan transportasi wisata, usaha ini terus berkembang dengan mengutamakan kenyamanan, keamanan, dan kepuasan pelanggan selama berada di Bali, khususnya di kawasan Ubud dan sekitarnya. Banyak wisatawan yang sudah menggunakan jasa wayan untuk mengajak mereka menjelajahi tempat wisata yang ada di bali, khususnya daerah ubud, tunggu apa lagi, ayo segera jelajahi wisata bali bersama wayan at ubud.",
       guideTitle: "Kenali Pemandu Anda",
       guideName: "Wayan",
       guideRole: "Founder & Lead Guide",

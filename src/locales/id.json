@@ -19,5 +19,31 @@
   "featured_title": "Destinasi Pilihan",
   "featured_subtitle": "Temukan keindahan alam dan budaya terbaik yang telah kami kurasi.",
   "book_now_caps": "PESAN SEKARANG",
-  "language": "Bahasa"
+  "language": "Bahasa",
+
+  "reviews_title": "Ulasan Wisatawan",
+  "reviews_subtitle": "Apa kata mereka yang sudah berlibur bersama Wayan at Ubud",
+  "review_form_title": "Tulis Ulasan Anda",
+  "review_name_label": "Nama Lengkap",
+  "review_name_placeholder": "Nama Anda",
+  "review_rating_label": "Rating",
+  "review_comment_label": "Komentar",
+  "review_comment_placeholder": "Ceritakan pengalaman liburan Anda...",
+  "review_submit_button": "Kirim Ulasan",
+
+  "gallery_title": "Dari Galeri",
+  "gallery_subtitle": "Jelajahi keindahan Bali yang memukau melalui koleksi momen pilihan kami. Setiap gambar menangkap esensi dari surga.",
+  "gallery_button": "Lihat Semua Gambar",
+
+  "tour_half_day": "TUR SETENGAH HARI",
+  "tour_full_day": "TUR SEHARI PENUH",
+  "tour_book_now": "PESAN SEKARANG",
+
+  "package_not_found_start": "Ups! Destinasi",
+  "package_not_found_end": "tidak ditemukan.",
+  "see_all_packages": "Lihat semua paket",
+  "map_interested_title": "Tertarik dengan \"{{location}}\"?",
+  "map_description": "Peta di samping menunjukkan lokasi asli di Bali. Jika ada pertanyaan mengenai rute, akomodasi, atau paket tour di area ini, silakan hubungi tim kami.",
+  "ask_admin_whatsapp": "Tanya Admin via WhatsApp",
+  "whatsapp_message_template": "Halo Admin, saya ingin bertanya tentang destinasi {{location}} di Bali."
 }
